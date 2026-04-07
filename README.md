@@ -18,8 +18,10 @@ Le projet est divisé en deux parties principales :
 ### Backend (API)
 *   **Framework** : Spring Boot 4.0.5
 *   **Langage** : Java 21
-*   **Persistance** : Spring Data JPA
-*   **Base de Données** : PostgreSQL 15-alpine
+*   **Persistance** : Spring Data JPA / PostgreSQL 15-alpine
+*   **Cache** : Redis (Data caching)
+*   **Documentation** : OpenAPI 3.0 / Swagger UI
+*   **Tests** : Cucumber (BDD) / JUnit 5
 *   **Outils** : Lombok, Maven
 
 ### Mobile (Frontend)
@@ -43,9 +45,9 @@ Assurez-vous d'avoir installé :
 *   [Node.js](https://nodejs.org/) (v18+)
 
 ### 1. Base de Données & Infrastructure
-La base de données PostgreSQL est gérée via Docker Compose.
+La base de données PostgreSQL et Redis sont gérées via Docker Compose.
 ```bash
-docker-compose up -d db
+docker-compose up -d
 ```
 
 ### 2. Démarrage de l'API Backend
@@ -54,7 +56,8 @@ Naviguez dans le dossier de l'API et lancez le serveur :
 cd api-spring-boot
 ./mvnw spring-boot:run
 ```
-L'API sera accessible sur : `http://localhost:8080/api/etudiants`
+L'API sera accessible sur : `http://localhost:8080`
+La documentation Swagger est disponible sur : `http://localhost:8080/swagger-ui.html`
 
 ### 3. Démarrage de l'Application Mobile
 Naviguez dans le dossier mobile et lancez Expo :
@@ -71,30 +74,52 @@ Vous pouvez ensuite scanner le QR code avec l'application Expo Go sur votre tél
 
 ```text
 projet-etudiants/
-├── api-spring-boot/        # Backend Java/Spring Boot
-│   ├── src/
-│   │   ├── main/java/.../  # Code source (Entities, Controllers, Services)
-│   │   └── main/resources/ # Configuration (application.properties)
-│   ├── pom.xml             # Dépendances Maven
-│   └── Dockerfile          # Image Docker Backend
-├── mobile-app/             # Application Expo
-│   ├── app/                # Screens & Navigation (Expo Router)
-│   ├── components/         # Composants réutilisables
-│   ├── types/              # Definitions TypeScript
-│   └── package.json        # Dépendances NPM
-└── docker-compose.yml       # Orchestration Database + API
+├── api-spring-boot/             # Backend Java / Spring Boot
+│   ├── src/main/java/com/.../    
+│   │   ├── controller/          # Endpoints REST
+│   │   ├── model/               # Entités JPA
+│   │   ├── repository/          # Accès base de données (JPA)
+│   │   ├── service/             # Logique métier
+│   │   └── dto/                 # Objets de transfert de données
+│   ├── src/test/java/.../       # Tests (JUnit, Cucumber)
+│   ├── src/main/resources/      # application.properties
+│   ├── Dockerfile               # Image Docker Backend
+│   └── pom.xml                  # Dépendances Maven
+├── mobile-app/                  # Frontend Mobile / Expo
+│   ├── app/                     # Navigation (Expo Router)
+│   │   ├── (tabs)/              # Écrans principaux (Tab Bar)
+│   │   └── _layout.tsx          # Configuration du layout racine
+│   ├── components/              # Composants UI réutilisables
+│   ├── assets/                  # Images et Polices
+│   ├── types/                   # Définitions TypeScript
+│   ├── app.json                 # Configuration Expo
+│   └── package.json             # Dépendances NPM
+├── k8s/                         # Manifests Kubernetes (Deployments, Services)
+├── docker-compose.yml           # Orchestration Docker (API, DB, Redis)
+└── README.md                    # Documentation Générale
 ```
 
 ---
 
 ## 🔗 Endpoints API Principaux
 
+### Étudiants (`/api/etudiants`)
 | Méthode | Endpoint | Description |
 | :--- | :--- | :--- |
-| `GET` | `/api/etudiants` | Récupérer la liste complète des étudiants |
+| `GET` | `/api/etudiants` | Liste des étudiants (filtre `?annee=` optionnel) |
+| `GET` | `/api/etudiants/{id}` | Détails d'un étudiant |
+| `POST` | `/api/etudiants` | Ajouter un étudiant |
+| `PUT` | `/api/etudiants/{id}` | Modifier un étudiant |
+| `DELETE` | `/api/etudiants/{id}` | Supprimer un étudiant |
 
-> [!NOTE]
-> L'API est configurée avec `@CrossOrigin(origins = "*")` pour faciliter le développement avec l'application mobile.
+### Départements (`/api/departements`)
+| Méthode | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/departements` | Liste de tous les départements |
+| `POST` | `/api/departements` | Créer un nouveau département |
+
+> [!TIP]
+> Pour une documentation interactive complète, visitez l'interface **Swagger UI** une fois l'API démarrée.
 
 ---
 
