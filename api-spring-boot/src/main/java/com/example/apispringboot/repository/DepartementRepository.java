@@ -1,4 +1,7 @@
 package com.example.apispringboot.repository;
 
-public class DepartementRepository {
+import com.example.apispringboot.model.Departement;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface DepartementRepository extends JpaRepository<Departement, Long> {
 }
