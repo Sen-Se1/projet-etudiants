@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      # CORS CONFIG
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOriginPatterns:
+              - "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+
+      # ROUTES
+      routes:
+        - id: api-spring-boot
+          uri: lb://api-spring-boot
+          predicates:
+            - Path=/api/etudiants/**,/api/departements/**
+
+        - id: grading-service
+          uri: lb://grading-service
+          predicates:
+            - Path=/api/notes/**
+
+      # FIX duplicate headers
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
