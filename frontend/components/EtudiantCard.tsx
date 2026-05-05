@@ -10,7 +10,7 @@ interface EtudiantCardProps {
 
 export default function EtudiantCard({ etudiant, onDelete }: EtudiantCardProps) {
   return (
-    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group">
+    <div data-testid="etudiant-item" className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group">
       <div className="p-6">
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-4">

@@ -54,6 +54,7 @@ export default function EtudiantForm({ etudiant, departements }: EtudiantFormPro
             <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 ml-1">Nom Complet</label>
             <div className="relative">
               <input
+                name="nom"
                 type="text"
                 required
                 value={formData.nom}
@@ -72,6 +73,7 @@ export default function EtudiantForm({ etudiant, departements }: EtudiantFormPro
                 <CreditCard size={18} />
               </div>
               <input
+                name="cin"
                 type="text"
                 required
                 value={formData.cin}
@@ -92,6 +94,7 @@ export default function EtudiantForm({ etudiant, departements }: EtudiantFormPro
                 <Calendar size={18} />
               </div>
               <input
+                name="dateNaissance"
                 type="date"
                 required
                 value={formData.dateNaissance}
@@ -105,6 +108,7 @@ export default function EtudiantForm({ etudiant, departements }: EtudiantFormPro
           <div className="space-y-2">
             <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 ml-1">Email académique</label>
             <input
+              name="email"
               type="email"
               required
               value={formData.email}
@@ -124,6 +128,7 @@ export default function EtudiantForm({ etudiant, departements }: EtudiantFormPro
                 <GraduationCap size={18} />
               </div>
               <input
+                name="anneePremiereInscription"
                 type="number"
                 required
                 min="2000"
@@ -139,6 +144,7 @@ export default function EtudiantForm({ etudiant, departements }: EtudiantFormPro
           <div className="space-y-2">
             <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 ml-1">Département</label>
             <select
+              name="departementId"
               required
               value={formData.departementId}
               onChange={(e) => setFormData({ ...formData, departementId: parseInt(e.target.value) })}

@@ -80,7 +80,7 @@ export default function EtudiantsPage() {
           <p className="text-lg font-medium">Récupération des données...</p>
         </div>
       ) : filteredEtudiants.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div data-testid="etudiant-list" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredEtudiants.map((etudiant) => (
             <EtudiantCard 
               key={etudiant.id} 
