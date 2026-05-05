@@ -1,0 +1,9 @@
+- name: Run tests
+  run: mvn verify
+- name: Publish results to Xray
+  run: |
+    curl -H "Content-Type: multipart/form-data" \
+    -H "Authorization: Bearer ${{ secrets.XRAY_TOKEN }}" \
+    -F "file=@target/surefire-reports/TEST-*.xml" \
+    "https://xray.cloud.getxray.app/api/v2/import/execution/junit?
+    projectKey=PROJ"
