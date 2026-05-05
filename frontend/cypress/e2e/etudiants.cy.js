@@ -13,6 +13,7 @@ describe('Gestion des étudiants', () => {
         cy.get('[name="email"]').type('alice.martin@universite.tn');
         cy.get('[name="anneePremiereInscription"]').clear().type('2024');
         cy.get('[name="departementId"]').select(1);
+        cy.get('[name="nom"]').type('Alice Martin');
 
         cy.get('[type="submit"]').click();
         
