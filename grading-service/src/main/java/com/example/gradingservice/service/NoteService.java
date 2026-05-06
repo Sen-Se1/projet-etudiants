@@ -1,6 +1,6 @@
 package com.example.gradingservice.service;
 
-import com.example.gradingservice.client.StudentClient;
+import com.example.gradingservice.client.EtudiantClient;
 import com.example.gradingservice.dto.NoteDTO;
 import com.example.gradingservice.mapper.NoteMapper;
 import com.example.gradingservice.model.Note;
@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 public class NoteService {
 
     private final NoteRepository noteRepository;
-    private final StudentClient studentClient;
+    private final EtudiantClient etudiantClient;
 
     public NoteDTO create(NoteDTO noteDTO) {
 
         try {
-            studentClient.getStudentById(noteDTO.getStudentId());
+            etudiantClient.findById(noteDTO.getStudentId());
         } catch (Exception e) {
             throw new RuntimeException("Student not found with id: " + noteDTO.getStudentId());
         }
@@ -50,7 +50,7 @@ public class NoteService {
                 .orElseThrow(() -> new RuntimeException("Note not found with id: " + id));
 
         try {
-            studentClient.getStudentById(noteDTO.getStudentId());
+            etudiantClient.findById(noteDTO.getStudentId());
         } catch (Exception e) {
             throw new RuntimeException("Student not found with id: " + noteDTO.getStudentId());
         }

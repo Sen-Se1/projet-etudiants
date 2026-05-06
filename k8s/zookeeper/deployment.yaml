@@ -1,22 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: zookeeper
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: frontend
+      app: zookeeper
   template:
     metadata:
       labels:
-        app: frontend
+        app: zookeeper
     spec:
       containers:
-        - name: frontend
-          image: sen5e1/frontend:2.0
+        - name: zookeeper
+          image: confluentinc/cp-zookeeper:7.5.0
           ports:
-            - containerPort: 3000
+            - containerPort: 2181
           env:
-            - name: NEXT_PUBLIC_API_URL
-              value: http://projet-etudiants.local
+            - name: ZOOKEEPER_CLIENT_PORT
+              value: "2181"
+            - name: ZOOKEEPER_TICK_TIME
+              value: "2000"

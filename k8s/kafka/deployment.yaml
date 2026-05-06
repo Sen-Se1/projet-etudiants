@@ -1,24 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: zookeeper
+  name: kafka
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: zookeeper
+      app: kafka
   template:
     metadata:
       labels:
-        app: zookeeper
+        app: kafka
     spec:
       containers:
-        - name: zookeeper
-          image: confluentinc/cp-zookeeper:7.5.0
+        - name: kafka
+          image: confluentinc/cp-kafka:7.5.0
           ports:
-            - containerPort: 2181
+            - containerPort: 9092
           env:
-            - name: ZOOKEEPER_CLIENT_PORT
-              value: "2181"
-            - name: ZOOKEEPER_TICK_TIME
-              value: "2000"
+            - name: KAFKA_BROKER_ID
+              value: "1"
+            - name: KAFKA_ZOOKEEPER_CONNECT
+              value: zookeeper:2181
+            - name: KAFKA_LISTENERS
+              value: PLAINTEXT://0.0.0.0:9092
+            - name: KAFKA_ADVERTISED_LISTENERS
+              value: PLAINTEXT://kafka:9092
+            - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_TRANSACTION_STATE_LOG_MIN_ISR
+              value: "1"
+            - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
+              value: "true"

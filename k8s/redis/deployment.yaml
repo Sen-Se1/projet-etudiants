@@ -1,24 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: grading-service
+  name: redis
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: grading-service
+      app: redis
   template:
     metadata:
       labels:
-        app: grading-service
+        app: redis
     spec:
       containers:
-        - name: grading-service
-          image: sen5e1/grading-service:2.0
+        - name: redis
+          image: redis:7-alpine
           ports:
-            - containerPort: 8082
-          env:
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://postgres:5432/etudiantsdb
-            - name: CLIENTS_ETUDIANT_SERVICE_URL
-              value: http://etudiant-service:8081
+            - containerPort: 6379

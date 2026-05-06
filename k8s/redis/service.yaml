@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: grading-service
+  name: redis
 spec:
   selector:
-    app: grading-service
+    app: redis
   ports:
-    - port: 8082
-      targetPort: 8082
+    - port: 6379
+      targetPort: 6379
   type: ClusterIP
