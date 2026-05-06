@@ -13,6 +13,9 @@ Eureka, Feign et Spring Cloud Gateway ont été supprimés.
 La découverte de services est assurée par le DNS interne Kubernetes.  
 L’exposition externe est assurée par Ingress.
 
+<img width="1536" height="1024" alt="architecture global " src="https://github.com/user-attachments/assets/43f5f108-9923-43b7-a5b0-6980f8065ac3" />
+
+
 ## Micro services
 
 | Service | Description | Port |
