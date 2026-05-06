@@ -1,4 +1,4 @@
-package com.example.notificationservice.notification;
+package com.example.notificationservice.event;
 
 import lombok.*;
 import java.time.LocalDateTime;

@@ -3,6 +3,8 @@ import EtudiantForm from '@/components/EtudiantForm';
 import { api } from '@/lib/api';
 import { UserPlus, UserCircle2 } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export default async function EtudiantDetailPage({ params }: { params: { id: string } }) {
   const { id } = await params;
   const isNew = id === 'new';

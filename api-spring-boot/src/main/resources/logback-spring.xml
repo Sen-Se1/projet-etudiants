@@ -11,7 +11,7 @@
         <destination>logstash:5000</destination>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <!-- Ce champ "service" permet de filtrer par micro service dans Kibana -->
-            <customFields>{"service":"etudiant-service"}</customFields>
+            <customFields>{"service":"api-spring-boot"}</customFields>
         </encoder>
     </appender>
     <root level="INFO">

@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { Users, Building2, ArrowRight, GraduationCap, BarChart3, Clock } from 'lucide-react';
 import { api } from '@/lib/api';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   let stats = { etudiants: 0, departements: 0 };
   
@@ -12,7 +14,7 @@ export default async function Home() {
     ]);
     stats = { etudiants: e.length, departements: d.length };
   } catch (err) {
-    console.error("Failed to fetch stats", err);
+    console.error("Dashboard: Failed to fetch stats from API.", err);
   }
 
   const cards = [

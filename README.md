@@ -1,130 +1,367 @@
-# Projet Étudiants Management
+# README.md — Projet Microservices Étudiants
 
-Une application full-stack moderne pour la gestion d'étudiants, combinant une **API REST Spring Boot** robuste et une **application mobile interactive** développée avec **Expo/React Native**.
+````markdown
+# 🎓 Projet Microservices Étudiants
 
----
-
-## 🏗️ Architecture du Projet
-
-Le projet est divisé en deux parties principales :
-
-*   **`api-spring-boot`** : Le backend fournissant une interface RESTful sécurisée connectée à une base de données PostgreSQL.
-*   **`mobile-app`** : L'interface utilisateur mobile permettant de visualiser et d'interagir avec les données des étudiants.
+Plateforme microservices de gestion des étudiants développée avec Spring Boot, Spring Cloud, Kafka, Docker et outils d’observabilité (Prometheus, Grafana, ELK).
 
 ---
 
-## 🛠️ Stack Technique
+# 📌 Architecture du projet
 
-### Backend (API)
-*   **Framework** : Spring Boot 4.0.5
-*   **Langage** : Java 21
-*   **Persistance** : Spring Data JPA / PostgreSQL 15-alpine
-*   **Cache** : Redis (Data caching)
-*   **Documentation** : OpenAPI 3.0 / Swagger UI
-*   **Tests** : Cucumber (BDD) / JUnit 5
-*   **Outils** : Lombok, Maven
+Le système est composé des microservices suivants :
 
-### Mobile (Frontend)
-*   **Framework** : Expo 54 / React Native 0.81.5
-*   **Langage** : TypeScript
-*   **Navigation** : Expo Router (Tabs Layout)
-*   **Styling** : StyleSheet (Native)
-
-### DevOps & Outils
-*   **Containerisation** : Docker & Docker Compose
-*   **Gestion de Versions** : Git
-
----
-
-## 🚀 Installation et Démarrage
-
-### 0. Prérequis
-Assurez-vous d'avoir installé :
-*   [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-*   [Java 21 JDK](https://adoptium.net/temurin/releases/?version=21)
-*   [Node.js](https://nodejs.org/) (v18+)
-
-### 1. Base de Données & Infrastructure
-La base de données PostgreSQL et Redis sont gérées via Docker Compose.
-```bash
-docker-compose up -d
-```
-
-### 2. Démarrage de l'API Backend
-Naviguez dans le dossier de l'API et lancez le serveur :
-```bash
-cd api-spring-boot
-./mvnw spring-boot:run
-```
-L'API sera accessible sur : `http://localhost:8080`
-La documentation Swagger est disponible sur : `http://localhost:8080/swagger-ui.html`
-
-### 3. Démarrage de l'Application Mobile
-Naviguez dans le dossier mobile et lancez Expo :
-```bash
-cd mobile-app
-npm install
-npm start
-```
-Vous pouvez ensuite scanner le QR code avec l'application Expo Go sur votre téléphone ou lancer un émulateur iOS/Android.
+| Service | Description |
+|---|---|
+| api-spring-boot | Gestion des étudiants et départements |
+| grading-service | Gestion des notes |
+| notification-service | Notifications Kafka |
+| api-gateway | Point d’entrée unique |
+| eureka-server | Service Discovery |
+| postgres | Base de données PostgreSQL |
+| redis | Cache Redis |
+| kafka | Broker Kafka |
+| zookeeper | Coordination Kafka |
+| prometheus | Collecte des métriques |
+| grafana | Dashboard monitoring |
+| elasticsearch | Stockage centralisé des logs |
+| logstash | Pipeline de logs |
+| kibana | Visualisation des logs |
+| mongodb | Base MongoDB pour auth-service |
+| auth-service | Authentification |
 
 ---
 
-## 📂 Structure des fichiers
+# 🏗️ Architecture technique
+
+```text
+Frontend
+   |
+API Gateway
+   |
+-------------------------------------------------
+|               |               |               |
+Etudiant    Grading       Notification     Auth
+Service      Service        Service       Service
+   |
+PostgreSQL + Redis
+
+Kafka <---- Communication asynchrone
+
+Prometheus + Grafana ---- Monitoring
+ELK Stack -------------- Logs centralisés
+````
+
+---
+
+# 📂 Structure du projet
 
 ```text
 projet-etudiants/
-├── api-spring-boot/             # Backend Java / Spring Boot
-│   ├── src/main/java/com/.../    
-│   │   ├── controller/          # Endpoints REST
-│   │   ├── model/               # Entités JPA
-│   │   ├── repository/          # Accès base de données (JPA)
-│   │   ├── service/             # Logique métier
-│   │   └── dto/                 # Objets de transfert de données
-│   ├── src/test/java/.../       # Tests (JUnit, Cucumber)
-│   ├── src/main/resources/      # application.properties
-│   ├── Dockerfile               # Image Docker Backend
-│   └── pom.xml                  # Dépendances Maven
-├── mobile-app/                  # Frontend Mobile / Expo
-│   ├── app/                     # Navigation (Expo Router)
-│   │   ├── (tabs)/              # Écrans principaux (Tab Bar)
-│   │   └── _layout.tsx          # Configuration du layout racine
-│   ├── components/              # Composants UI réutilisables
-│   ├── assets/                  # Images et Polices
-│   ├── types/                   # Définitions TypeScript
-│   ├── app.json                 # Configuration Expo
-│   └── package.json             # Dépendances NPM
-├── k8s/                         # Manifests Kubernetes (Deployments, Services)
-├── docker-compose.yml           # Orchestration Docker (API, DB, Redis)
-└── README.md                    # Documentation Générale
+│
+├── api-gateway/
+├── api-spring-boot/
+├── grading-service/
+├── notification-service/
+├── eureka-server/
+├── auth-service/
+├── frontend/
+│
+├── observability/
+│   ├── prometheus/
+│   │   └── prometheus.yml
+│   └── logstash/
+│       └── pipeline/
+│           └── logstash.conf
+│
+├── docker-compose.yml
+└── README.md
 ```
 
 ---
 
-## 🔗 Endpoints API Principaux
+# 🚀 Technologies utilisées
 
-### Étudiants (`/api/etudiants`)
-| Méthode | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET` | `/api/etudiants` | Liste des étudiants (filtre `?annee=` optionnel) |
-| `GET` | `/api/etudiants/{id}` | Détails d'un étudiant |
-| `POST` | `/api/etudiants` | Ajouter un étudiant |
-| `PUT` | `/api/etudiants/{id}` | Modifier un étudiant |
-| `DELETE` | `/api/etudiants/{id}` | Supprimer un étudiant |
+## Backend
 
-### Départements (`/api/departements`)
-| Méthode | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET` | `/api/departements` | Liste de tous les départements |
-| `POST` | `/api/departements` | Créer un nouveau département |
+* Java 17
+* Spring Boot 3
+* Spring Cloud
+* Spring Gateway
+* Spring Eureka
+* Spring Data JPA
+* Spring Kafka
+* Spring Actuator
+* Redis
+* PostgreSQL
+* MongoDB
 
-> [!TIP]
-> Pour une documentation interactive complète, visitez l'interface **Swagger UI** une fois l'API démarrée.
+## Frontend
+
+* Next.js
+* React
+
+## DevOps & Observabilité
+
+* Docker
+* Docker Compose
+* Kafka
+* Zookeeper
+* Prometheus
+* Grafana
+* Elasticsearch
+* Logstash
+* Kibana
 
 ---
 
-## ✨ Fonctionnalités implémentées
-- ✅ Liste des étudiants avec rendu optimisé (`FlatList`)
-- ✅ Gestion d'état de chargement et d'erreur
-- ✅ Containerisation de la base de données
-- ✅ Communication Backend/Frontend temps réel
+# ⚙️ Prérequis
+
+Installer :
+
+* Docker Desktop
+* Docker Compose
+* Java 17
+* Maven
+* Git
+
+---
+
+# 🔧 Configuration
+
+Créer un fichier `.env` :
+
+```env
+POSTGRES_DB=etudiants_db
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=root
+POSTGRES_PORT=5432
+
+REDIS_PORT=6379
+
+ETUDIANT_SERVICE_PORT=8081
+GRADING_SERVICE_PORT=8082
+GATEWAY_PORT=8080
+EUREKA_PORT=8761
+FRONTEND_PORT=3000
+
+DB_INTERNAL_URL=jdbc:postgresql://postgres:5432/etudiants_db
+
+REDIS_INTERNAL_HOST=redis
+REDIS_INTERNAL_PORT=6379
+
+EUREKA_SERVICE_URL=http://eureka-server:8761/eureka
+```
+
+---
+
+# ▶️ Lancement du projet
+
+## Construire et lancer tous les services
+
+```bash
+docker compose up --build
+```
+
+## Vérifier les conteneurs
+
+```bash
+docker ps
+```
+
+---
+
+# 🌐 URLs des services
+
+| Service          | URL                                                                            |
+| ---------------- | ------------------------------------------------------------------------------ |
+| Eureka           | [http://localhost:8761](http://localhost:8761)                                 |
+| API Gateway      | [http://localhost:8080](http://localhost:8080)                                 |
+| Swagger Etudiant | [http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html) |
+| Swagger Grading  | [http://localhost:8082/swagger-ui.html](http://localhost:8082/swagger-ui.html) |
+| Prometheus       | [http://localhost:9090](http://localhost:9090)                                 |
+| Grafana          | [http://localhost:3002](http://localhost:3002)                                 |
+| Kibana           | [http://localhost:5601](http://localhost:5601)                                 |
+
+---
+
+# 📡 Communication Kafka
+
+## Topics utilisés
+
+| Topic            | Description                    |
+| ---------------- | ------------------------------ |
+| etudiant-created | Notification création étudiant |
+| note-created     | Notification ajout note        |
+
+## Vérifier les topics
+
+```bash
+docker exec -it kafka kafka-topics --bootstrap-server localhost:9092 --list
+```
+
+---
+
+# 📬 Test des notifications
+
+## Créer un étudiant
+
+```bash
+curl -X POST http://localhost:8080/api/etudiants ^
+-H "Content-Type: application/json" ^
+-d "{\"cin\":\"12345678\",\"nom\":\"Ali\",\"email\":\"ali@test.com\",\"anneePremiereInscription\":2024}"
+```
+
+## Vérifier les logs
+
+```bash
+docker logs -f notification-service
+```
+
+Résultat attendu :
+
+```text
+[NOTIFICATION] Nouvel étudiant inscrit : Ali
+```
+
+---
+
+# 📊 Observabilité
+
+# ✅ Actuator
+
+Endpoints disponibles :
+
+```text
+/actuator/health
+/actuator/prometheus
+/actuator/metrics
+```
+
+Exemple :
+
+```bash
+curl http://localhost:8081/actuator/health
+```
+
+---
+
+# 📈 Prometheus
+
+## Vérifier les targets
+
+```text
+http://localhost:9090/targets
+```
+
+Targets attendus :
+
+* etudiant-service
+* grading-service
+* notification-service
+* api-gateway
+
+---
+
+# 📉 Grafana
+
+## Connexion
+
+```text
+Username: admin
+Password: admin
+```
+
+## Ajouter datasource
+
+```text
+http://prometheus:9090
+```
+
+## Dashboards recommandés
+
+* JVM Micrometer
+* Spring Boot Statistics
+
+---
+
+# 📜 Logs centralisés — ELK
+
+## Kibana
+
+```text
+http://localhost:5601
+```
+
+Créer index pattern :
+
+```text
+microservices-logs-*
+```
+
+Puis :
+
+```text
+Discover
+```
+
+---
+
+# 🧪 Tests utiles
+
+## Vérifier Kafka
+
+```bash
+docker exec -it kafka kafka-topics --bootstrap-server localhost:9092 --list
+```
+
+## Vérifier health services
+
+```bash
+curl http://localhost:8081/actuator/health
+curl http://localhost:8082/actuator/health
+curl http://localhost:8083/actuator/health
+```
+
+---
+
+# 🛠️ Commandes utiles
+
+## Arrêter les services
+
+```bash
+docker compose down
+```
+
+## Supprimer volumes
+
+```bash
+docker compose down -v
+```
+
+## Voir logs
+
+```bash
+docker logs -f etudiant-service
+docker logs -f grading-service
+docker logs -f notification-service
+```
+
+---
+
+# 👨‍💻 Auteur
+
+Projet réalisé dans le cadre du module :
+
+```text
+Architecture Microservices & Observabilité
+```
+
+---
+
+# 📄 Licence
+
+Projet pédagogique universitaire.
+
+```
+```

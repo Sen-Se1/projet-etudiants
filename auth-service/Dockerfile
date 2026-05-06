@@ -1,29 +1,18 @@
-FROM node:18-alpine AS builder
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm install
-
-COPY . .
-
 FROM node:18-alpine
 
 WORKDIR /app
 
-RUN deluser --remove-home node && \
-    addgroup -g 1000 appgroup && \
-    adduser -u 1000 -G appgroup -S -D appuser
-USER 1000:1000
+COPY package*.json ./
+RUN npm ci --omit=dev
 
-COPY --from=builder --chown=appuser:appgroup /app/node_modules ./node_modules
-COPY --from=builder --chown=appuser:appgroup /app/package*.json ./
-COPY --from=builder --chown=appuser:appgroup /app/index.js ./
+COPY index.js ./
+COPY src ./src
 
-ENV BACKEND_PORT=3000
-EXPOSE 3000
+RUN chown -R node:node /app
 
-HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=40s \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
+USER node
+
+ENV PORT=3001
+EXPOSE 3001
 
 CMD ["node", "index.js"]
