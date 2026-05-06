@@ -106,19 +106,42 @@ mvn gatling:test
 ## Structure du projet
 
 ```text
-projet-etudiants/
-├── api-spring-boot/
-├── grading-service/
-├── notification-service/
-├── auth-service/
-├── frontend/
-├── mobile-app/
+/projet-etudiants/
+├── api-spring-boot/ # Micro service étudiant (Spring Boot)
+├── grading-service/ # Micro service notes (Spring Boot)
+├── notification-service/ # Micro service notifications + Kafka consumer
+├── auth-service/ # Micro service auth (Node.js + Express + MongoDB)
+├── frontend/ # Application Next.js
+│ └── cypress/e2e/ # Tests E2E Cypress
+├── mobile-app/ # Application Flutter ou React Native
 ├── helm/
-├── k8s/
+│ └── projet-etudiants/ # Chart Helm packagisant toute la plateforme
+│ ├── Chart.yaml
+│ ├── values.yaml
+│ ├── values-prod.yaml
+│ └── templates/
+├── k8s/ # Manifests Kubernetes bruts (avant Helm)
+│ ├── secrets/
+│ ├── postgres/
+│ ├── mongodb/
+│ ├── redis/
+│ ├── kafka/
+│ ├── etudiant-service/
+│ ├── grading-service/
+│ ├── notification-service/
+│ ├── auth-service/
+│ ├── frontend/
+│ └── ingress.yaml
 ├── observability/
+│ ├── logstash/pipeline/
+│ └── prometheus/
 ├── .github/
+│ ├── workflows/
+│ │ └── test-and-report.yml
+│ ├── ISSUE_TEMPLATE/
+│ └── pull_request_template.md
 ├── docker-compose.yml
-└── README.md
+└── README.md # README professionnel avec captures d'écran
 ```
 
 ## Architecture AWS

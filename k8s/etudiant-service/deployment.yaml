@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: etudiant-service
-          image: <votre-username>/etudiant-service:2.0
+          image: sen5e1/projet-etudiants-etudiant-service:2.0
 
           ports:
             - containerPort: 8081
